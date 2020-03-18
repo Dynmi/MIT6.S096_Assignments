@@ -1,4 +1,3 @@
-
 /*
 PROG: floating
 LANG: C
@@ -7,25 +6,30 @@ AUTH: dynmiWang
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
+#include <time.h>
+#include <math.h>
 
 #define MANTISSA_WIDTH 23
 #define MAX_EXPONENT   127
-bool res[100];
-float f;
-int   p;
-int exp_;
-int transform(float f)
+#define BITS_LEN       32
+
+bool   res[BITS_LEN];
+float  f;
+short  EXPO_,p,n;
+
+void transform(float f)
 {
     memset(res,0,sizeof(res));
-    int e = MAX_EXPONENT;
+    int e = BITS_LEN;
     p=0;
-    float cmp = pow(2,e);
+    float cmp = pow(2,BITS_LEN);
     while(f<cmp)
     {
         e--;
         cmp = cmp / 2.0;
     }
-    exp_ = e;
+    EXPO_ = e;
     
     while(f>0)
     {
@@ -38,10 +42,8 @@ int transform(float f)
         {
             res[p++]=0;
         }
-        e--;
         cmp = cmp / 2.0;
     }
-    return e;
 
 }
 
@@ -49,10 +51,7 @@ int main()
 {
     FILE *input  = fopen("floating.in","r"),
          *output = fopen("floating.out","w"); 
-    int n;
-    n=2;
-    fscanf(input,"%d",&n);
-    float f;
+    fscanf(input,"%hd",&n);
     for(int i=0;i<n;i++)
     {
         fscanf(input,"%f",&f);
@@ -67,9 +66,9 @@ int main()
         {
             fprintf(output,"%d",res[i]);
         }
-        fprintf(output," * 2^%d\n",exp_);
+        fprintf(output," * 2^%d\n",EXPO_);
         clock_t end =clock();
-        printf("%d     %d\n",i,end-start);
+        printf("%d     %ld\n",i,end-start);
     }
     fclose(input);
     fclose(output);
