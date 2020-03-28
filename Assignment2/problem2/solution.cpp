@@ -83,7 +83,7 @@ int main() {
     std::cerr << "Could not open mst.in\n";
     return 1;
   }
-   
+
   return 0;
 }
 
